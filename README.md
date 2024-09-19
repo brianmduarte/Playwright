@@ -1,153 +1,172 @@
-## O que é o Playwright
+# Playwright: Guia de Automação de Testes
+
+## Sumário
+
+- [O que é o Playwright?](#o-que-é-o-playwright)
+- [Principais Características](#principais-características)
+- [Instalando o Playwright](#instalando-o-playwright)
+  - [No Windows](#no-windows)
+  - [No Ubuntu/Linux](#no-ubuntulinux)
+- [Configurando o Projeto](#configurando-o-projeto)
+- [Escrevendo Testes no Playwright](#escrevendo-testes-no-playwright)
+  - [Estrutura Básica de um Teste](#estrutura-básica-de-um-teste)
+  - [Teste com Interações Mais Avançadas](#teste-com-interações-mais-avançadas)
+- [Executando Testes no Playwright](#executando-testes-no-playwright)
+
+---
+
+## O que é o Playwright?
 
 Playwright é um framework moderno de automação de testes para aplicações web, desenvolvido pela Microsoft. Ele é projetado para criar e executar testes de ponta a ponta (end-to-end) em várias plataformas e navegadores. O Playwright oferece uma API poderosa e flexível para interagir com a interface do usuário, garantindo que o seu software funcione conforme esperado em diferentes ambientes.
 
-## Quais as suas principais características?
+## Principais Características
 
-- **Suporte a Múltiplos Navegadores**: O Playwright permite testar em vários navegadores, incluindo Chromium (Chrome e Edge), WebKit (Safari) e Firefox, garantindo uma ampla cobertura de testes.
+- **Suporte a Múltiplos Navegadores**: Teste em navegadores como Chromium (Chrome e Edge), WebKit (Safari) e Firefox, garantindo uma ampla cobertura.
+- **Automação Completa**: Simula ações do usuário (cliques, digitação, navegação) e verifica o conteúdo e estado dos elementos nas páginas.
+- **Multilínguas**: Suporte a JavaScript, TypeScript, Python, C# e Java, proporcionando flexibilidade para equipes com diferentes habilidades.
+- **Testes de Rede e Cookies**: Intercepta e modifica requisições de rede, manipula cookies e dados de armazenamento.
+- **Captura de Tela e Vídeo**: Suporte integrado para capturas de tela e gravações de vídeo dos testes, facilitando a depuração de falhas.
 
-- **Automação e Interação Completa**: Permite simular ações do usuário, como clicar, digitar e navegar, além de verificar o conteúdo das páginas e os estados dos elementos.
+---
 
-- **Testes Multi-Linguagem**: O Playwright suporta várias linguagens de programação, como JavaScript, TypeScript, Python, C#, e Java, proporcionando flexibilidade para equipes com diferentes expertise.
+## Instalando o Playwright
 
-- **Testes de Rede e Cookies**: Oferece funcionalidades avançadas para interceptar e modificar requisições de rede, manipular cookies e armazenar dados para testar diferentes cenários.
+### No Windows
 
-- **Captura de Tela e Vídeo**: Possui suporte integrado para captura de screenshots e gravação de vídeos dos testes, facilitando a análise e depuração de falhas.
+Pré-requisitos: **Node.js** e **npm** instalados.
 
+1. Verifique se o Node.js e o npm estão instalados:
+   ```bash
+   node -v
+   npm -v
 
-## Instalando o Playwright no Windows
+2. Se não estiverem instalados, baixe o Node.js no site oficial:
 
-A instalação é bem simples, basta seguir os passos abaixo:
+**LTS**: Recomendado para a maioria dos usuários. <br>
+**Current**: Inclui as versões mais recentes e recursos experimentais.
 
-Pré-requisitos:
-- Ter o Node.js e o npm instalados
-
-1. Instalação
-
-Verificando se você possui o Node e o Npm instalados:
-```javascript
-node -v
-```
-```javascript
-npm -v
-```
-
-**Caso não estejam instalados:**
-1. Baixe o Instalador do Node.js
-
-Primeiro, baixe o instalador do Node.js da <a href="https://nodejs.org/pt"></a>página oficial de downloads. Existem dois tipos de instaladores:
-
-LTS (Long Term Support): Recomendado para a maioria dos usuários.
-Current: Inclui as versões mais recentes e recursos experimentais.
-Você pode escolher a versão que deseja e fazer o download do instalador .msi (para sistemas de 64 bits ou 32 bits, conforme necessário).
-
-2. Siga os passos do instalador e verifique novamente os comandos da etapa '1. Instalação',
-
-3. Realizadas as etapas anteriores, execute agora os comandos abaixo para instalar o Playwright
-
-```javascript
+3. Após a instalação do Node.js, execute:
+```bash
 npm init playwright@latest
 ```
-
-4. Verificando se foi instalado corretamente
-```javascript
+4. Verifique se o Playwright foi instalado corretamente:
+```bash
 npx playwright --version
 ```
 
-## Instalando o Playwright no Ubuntu/Linux
+### No Ubuntu/Linux
 
-1. Instalação
-
-Verificando se você possui o Node e o Npm instalados:
-```javascript
-node -v
-```
-```javascript
-npm -v
+1. Verifique se o Node.js e o npm estão instalados:
+```bash
+   node -v
+   npm -v
 ```
 
-**Caso não estejam instalados:**
-
-1. Execute o comando abaixo no terminal: 
-```javascript
+2. Se não estiverem instalados, execute no terminal:
+```bash
 sudo apt update
-```
-
-2. Agora execute este comando:
-```javascript
 sudo apt install nodejs npm
 ```
 
-3. Com o Node.js e o npm instalados, você pode instalar o Playwright e os navegadores necessários
-
-```javascript
+3. Instale o Playwright:
+```bash
 npm init playwright@latest
 ```
 
-4. Verificando se foi instalado corretamente
-
-```javascript
+5. Verifique a instalação:
+```bash
 npx playwright --version
 ```
 
-## Configurando o projeto
+### Configurando o Projeto
+Após a instalação, o arquivo ```playwright.config.js``` é gerado para definir a configuração do Playwright.
 
-Um arquivo chamado playwright.config.js é criado assim que o projeto for instalado. Por meio dele poderemos fazer algumas modificações básicas. Por exemplo:
-
+Exemplo de playwright.config.js:
 ```javascript
 // playwright.config.js
 module.exports = {
-  // Define os navegadores que serão utilizados
+  // Definir navegadores para testar
   projects: [
     { name: 'firefox', use: { browserName: 'firefox' } },
     { name: 'webkit', use: { browserName: 'webkit' } },
-    { name: 'webkit', use: { browserName: 'chromium' } },
+    { name: 'chromium', use: { browserName: 'chromium' } },
   ],
   
-  // Define a URL base para os testes
+  // Configurações globais
   use: {
     baseURL: 'https://example.com',
-    // Configura a captura de tela e gravação de vídeo
-    screenshot: 'on',
-    video: 'on',
+    screenshot: 'on', // Captura de tela ao falhar
+    video: 'on',      // Gravação de vídeo dos testes
   },
-  
-  // Configura o número de testes paralelos
+
+  // Executar testes em paralelo
   workers: 4,
-  
-  // Habilita o modo de depuração
+
+  // Retries para testes que falham
   retries: 1,
 };
 ```
 
-## Como executar testes com o Playwright?
+### Escrevendo Testes no Playwright
 
-1. Escreva os seus casos de teste
+**Estrutura Básica de um Teste**
 
-Crie arquivos de teste em uma pasta apropriada, como por exemplo, 'Testes_Smoke/', e utlize a extensão desejada (ex: '.spec.js', '.test.js').
+Crie os arquivos de teste na pasta tests/ com a extensão .spec.js(no caso de se utilizar Javascript como linguagem). Cada arquivo pode conter vários casos de teste.
 
-Abaixo, um exemplo prático de teste:
-
+Exemplo Prático:
 ```javascript
 // tests/example.spec.js
 const { test, expect } = require('@playwright/test');
 
-test('Identificar o título principal da página "Enacom"', async ({ page }) => {
+test('Validar o título da página inicial', async ({ page }) => {
   await page.goto('https://enacom.com');
   await expect(page).toHaveTitle('Enacom');
 });
 ```
+#### Teste com Interações Mais Avançadas
 
-2. Executando os Testes
-
-Utilize o comando:
 ```javascript
+// tests/advanced.spec.js
+const { test, expect } = require('@playwright/test');
+
+test('Fazer login e validar usuário', async ({ page }) => {
+  // Acessar a página de login
+  await page.goto('https://example.com/login');
+
+  // Preencher campos de login
+  await page.fill('#username', 'seu-usuario');
+  await page.fill('#password', 'sua-senha');
+
+  // Clicar no botão de login
+  await page.click('button[type="submit"]');
+
+  // Verificar se foi redirecionado para a página do usuário
+  await expect(page).toHaveURL('https://example.com/dashboard');
+  
+  // Verificar se o nome do usuário está visível
+  await expect(page.locator('h1')).toContainText('Bem-vindo, seu-usuario');
+});
+```
+
+### Executando Testes no Playwright
+
+1. Para executar todos os testes:
+```bash
 npx playwright test
 ```
 
-Para executar outros testes em paralelo e visualizar relatórios detalhados, utilize:
-```javascript
+2. Para gerar relatórios em HTML:
+```bash
 npx playwright test --reporter=html
 ```
 
+3. Para executar testes em um navegador específico:
+```bash
+npx playwright test --project=firefox
+```
 
+4. Para executar testes no modo interativo com depuração:
+```bash
+npx playwright test --debug
+```
+5.  
