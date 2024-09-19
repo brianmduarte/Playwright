@@ -169,3 +169,7 @@ npx playwright test --project=firefox
 ```bash
 npx playwright test --debug
 ```
+5. Para visualizar os testes sendo executados em um navegador (headful mode):
+```bash
+npx playwright test --headed
+```
