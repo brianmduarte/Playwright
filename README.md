@@ -169,4 +169,3 @@ npx playwright test --project=firefox
 ```bash
 npx playwright test --debug
 ```
-5.  
