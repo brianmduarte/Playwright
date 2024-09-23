@@ -154,22 +154,26 @@ test('Fazer login e validar usuário', async ({ page }) => {
 ```bash
 npx playwright test
 ```
+2. Para visualizar a execução dos testes na interface do Playwright:
+```bash
+npx playwright test --ui
+```
 
-2. Para gerar relatórios em HTML:
+3. Para gerar relatórios em HTML:
 ```bash
 npx playwright test --reporter=html
 ```
 
-3. Para executar testes em um navegador específico:
+4. Para executar testes em um navegador específico:
 ```bash
 npx playwright test --project=firefox
 ```
 
-4. Para executar testes no modo interativo com depuração:
+5. Para executar testes no modo interativo com depuração:
 ```bash
 npx playwright test --debug
 ```
-5. Para visualizar os testes sendo executados em um navegador (headful mode):
+6. Para visualizar os testes sendo executados em um navegador (headful mode):
 ```bash
 npx playwright test --headed
 ```
