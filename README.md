@@ -177,3 +177,7 @@ npx playwright test --debug
 ```bash
 npx playwright test --headed
 ```
+7. Para gravar os passos automaticamente:
+```bash
+npx playwright codegen link_da_aplicação_aqui.com.br
+```
