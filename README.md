@@ -8,9 +8,10 @@
   - [No Windows](#no-windows)
   - [No Ubuntu/Linux](#no-ubuntulinux)
 - [Configurando o Projeto](#configurando-o-projeto)
-- [Escrevendo Testes no Playwright](#escrevendo-testes-no-playwright)
-  - [Estrutura Básica de um Teste](#estrutura-básica-de-um-teste)
-  - [Teste com Interações Mais Avançadas](#teste-com-interações-mais-avançadas)
+- [Estruturas de testes Básicos, Intermediários e Avançados](#estruturas-de-testes-básicos-intermediários-e-avançados)
+  - [Exemplo Básico](#exemplo-básico)
+  - [Exemplo Intermediário](#exemplo-intermediário)
+  - [Exemplo Avançado](#exemplo-avançado)
 - [Executando Testes no Playwright](#executando-testes-no-playwright)
 
 ---
@@ -107,13 +108,13 @@ module.exports = {
 };
 ```
 
-### Escrevendo Testes no Playwright
+### Estruturas de testes Básicos, Intermediários e Avançados
 
-**Estrutura Básica de um Teste**
+#### Exemplo Básico
 
 Crie os arquivos de teste na pasta tests/ com a extensão .spec.js(no caso de se utilizar Javascript como linguagem). Cada arquivo pode conter vários casos de teste.
 
-Exemplo Prático:
+Um exemplo de teste simples que valida o título da página:
 ```javascript
 // tests/example.spec.js
 const { test, expect } = require('@playwright/test');
@@ -123,7 +124,32 @@ test('Validar o título da página inicial', async ({ page }) => {
   await expect(page).toHaveTitle('Enacom');
 });
 ```
-#### Teste com Interações Mais Avançadas
+
+#### Exemplo Intermediário
+Um exemplo de teste com interação de preenchimento de formulário e verificação do comportamento após envio:
+
+```javascript
+// tests/login.spec.js
+const { test, expect } = require('@playwright/test');
+
+test('Fazer login e verificar redirecionamento', async ({ page }) => {
+  await page.goto('https://example.com/login');
+
+  await page.fill('#username', 'user123');
+  await page.fill('#password', 'senha123');
+  await page.click('button[type="submit"]');
+
+  await expect(page).toHaveURL('https://example.com/dashboard');
+  await expect(page.locator('h1')).toContainText('Bem-vindo, user123');
+});
+```
+
+
+#### Exemplo Avançado
+
+Testes mais avançados envolvem múltiplas interações, como clicar em elementos dinâmicos, manipular cookies e validar o estado da rede.
+
+##### Exemplo 1:
 
 ```javascript
 // tests/advanced.spec.js
@@ -147,6 +173,40 @@ test('Fazer login e validar usuário', async ({ page }) => {
   await expect(page.locator('h1')).toContainText('Bem-vindo, seu-usuario');
 });
 ```
+
+##### Exemplo 2:
+
+```javascript
+// tests/advanced.spec.js
+const { test, expect } = require('@playwright/test');
+
+test('Teste avançado com login, navegação e validação de API', async ({ page, request }) => {
+  // Acessar a página de login
+  await page.goto('https://example.com/login');
+
+  // Preencher e enviar o formulário
+  await page.fill('#username', 'user123');
+  await page.fill('#password', 'senha123');
+  await page.click('button[type="submit"]');
+
+  // Verificar redirecionamento e nome do usuário
+  await expect(page).toHaveURL('https://example.com/dashboard');
+  await expect(page.locator('h1')).toContainText('Bem-vindo, user123');
+
+  // Realizar uma chamada de API
+  const response = await request.get('https://example.com/api/userinfo');
+  const data = await response.json();
+  expect(data.username).toBe('user123');
+
+  // Verificar se cookies estão sendo salvos corretamente
+  const cookies = await page.context().cookies();
+  expect(cookies).toContainEqual(expect.objectContaining({
+    name: 'session_id',
+    value: expect.any(String),
+  }));
+});
+```
+
 
 ### Executando Testes no Playwright
 
